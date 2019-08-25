@@ -96,13 +96,6 @@ app.post('/google', async (req, res) => {
             });
         }
     });
-
-    // res.status(200).json({
-    //     ok: true,
-    //     mensaje: "OK!",
-    //     googleUser: googleUser
-    // });
-
 });
 
 
@@ -141,7 +134,10 @@ app.post('/', (req, res) => {
         // ? Generando el token
         //================================
         usuarioDB.password = ':)';
-        const token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: 14400 }); //4 horas
+        // 14400 s = 4 horas
+        // 86400 s = 1 día
+        // 31540000 s = 1 año
+        const token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: 86400 });
 
         res.status(200).json({
             ok: true,
