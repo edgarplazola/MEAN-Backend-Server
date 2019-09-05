@@ -14,7 +14,7 @@ const Usuario = require('../models/usuario');
 app.get('/', (req, res) => {
     let desde = req.query.desde || 0;
     desde = Number(desde);
-    Usuario.find({}, 'nombre email img role')
+    Usuario.find({}, 'nombre email img role google')
         .skip(desde)
         .limit(5)
         .exec((err, usuarios) => {
@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
 //==========================
 // Crear un nuevo usuario
 //==========================
-app.post('/', mdAutenticacion.verificaToken, (req, res) => {
+app.post('/', (req, res) => {
 
     const body = req.body;
     const usuario = new Usuario({
@@ -76,7 +76,7 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
 // Actualizar un usuario
 //==========================
 //test id: 5d5f4cba0f11ab0dfef51d11
-app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
+app.put('/:id', [mdAutenticacion.verificaToken,mdAutenticacion.verificaADMIN_ROLE_o_MismoUsuario], (req, res) => {
 
     var id = req.params.id;
     var body = req.body;
@@ -126,7 +126,7 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
 //================================
 // ? Elminar un usuario por el id
 //================================
-app.delete('/:id', mdAutenticacion.verificaToken, (req, res) => {
+app.delete('/:id', [mdAutenticacion.verificaToken,mdAutenticacion.verificaADMIN_ROLE], (req, res) => {
 
     const id = req.params.id;
     Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
